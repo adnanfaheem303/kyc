@@ -39,15 +39,12 @@ public class Customer {
 
     // Enum for KYC Deduplication Status
     public enum KycDeduplicationStatus {
-        PENDING,
-        APPROVED,
-        REJECTED
+
     }
 
     // Enum for KYC Type
     public enum KycType {
-        PRIMARY,
-        SECONDARY
+
     }
 
     // Getters and setters
@@ -119,15 +116,15 @@ public class Customer {
         return kycDedupStatus;
     }
 
-    public void setKycDedupStatus(KycDeduplicationStatus kycDedupStatus) {
-        this.kycDedupStatus = kycDedupStatus;
+    public void setKycDedupStatus(String kycDedupStatus) {
+        this.kycDedupStatus = KycDeduplicationStatus.valueOf(kycDedupStatus);
     }
 
     public KycType getKycType() {
         return kycType;
     }
 
-    public void setKycType(KycType kycType) {
-        this.kycType = kycType;
+    public void setKycType(String kycType) {
+        this.kycType = KycType.valueOf(kycType);
     }
 }

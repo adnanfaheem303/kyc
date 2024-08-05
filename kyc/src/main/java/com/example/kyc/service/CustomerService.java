@@ -1,7 +1,7 @@
 package com.example.kyc.service;
 
 import com.example.kyc.Customer;
-import com.example.kyc.CustomerDto;
+import com.example.kyc.CustomerDTO;
 import com.example.kyc.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer createCustomer(CustomerDto customerDto) {
+    public Customer createCustomer(CustomerDTO customerDto) {
         Customer customer = new Customer();
         customer.setUserId(customerDto.getUserId());
         customer.setFullAadhaarNumber(customerDto.getFullAadhaarNumber());
@@ -25,8 +25,8 @@ public class CustomerService {
         customer.setUpdatedDate(LocalDateTime.now());
         customer.setCreatedBy(customerDto.getCreatedBy());
         customer.setUpdatedBy(customerDto.getUpdatedBy());
-        customer.setKycDedupStatus(customerDto.getKycDedupStatus());
-        customer.setKycType(customerDto.getKycType());
+        customer.setKycDedupStatus(String.valueOf(Customer.KycDeduplicationStatus.valueOf(customerDto.getKycDedupStatus())));
+        customer.setKycType(String.valueOf(Customer.KycType.valueOf(customerDto.getKycType())));
 
         return customerRepository.save(customer);
     }
@@ -39,7 +39,7 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public Customer updateCustomer(Long id, CustomerDto customerDto) {
+    public Customer updateCustomer(Long id, CustomerDTO customerDto) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
         if (optionalCustomer.isPresent()) {

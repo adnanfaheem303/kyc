@@ -16,7 +16,7 @@ public class AadhaarController {
 
     @PostMapping("/add-aadhaar")
     public String addAadhaar(@RequestParam String aadhaarNumber) {
-        aadhaarService.createTableAndInsertData(aadhaarNumber);
-        return "Data added successfully!";
+        Long userId = aadhaarService.createTableAndInsertData(aadhaarNumber);
+        return "Data added successfully! Your User ID is: " + userId;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.kyc.controller;
 
 import com.example.kyc.Customer;
-import com.example.kyc.CustomerDto;
+import com.example.kyc.CustomerDTO;
 import com.example.kyc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customerDto) {
         Customer customer = customerService.createCustomer(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(customer);
     }
@@ -38,7 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDto) {
         try {
             Customer updatedCustomer = customerService.updateCustomer(id, customerDto);
             return ResponseEntity.ok(updatedCustomer);

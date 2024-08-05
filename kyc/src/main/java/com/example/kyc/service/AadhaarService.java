@@ -14,7 +14,7 @@ public class AadhaarService {
 
     private final AtomicLong userIdCounter = new AtomicLong(); // For generating unique IDs
 
-    public void createTableAndInsertData(String aadhaarNumber) {
+    public Long createTableAndInsertData(String aadhaarNumber) {
         // Automatically generate a unique user ID
         Long userId = userIdCounter.incrementAndGet(); // Generate a new unique ID
 
@@ -35,5 +35,8 @@ public class AadhaarService {
         // SQL statement to insert data into the new table
         String insertDataSql = "INSERT INTO " + tableName + " (user_id, last_4_digits) VALUES (?, ?)";
         jdbcTemplate.update(insertDataSql, userId, last4Digits);
+
+        // Return the generated userId
+        return userId;
     }
 }

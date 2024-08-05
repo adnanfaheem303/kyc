@@ -1,18 +1,30 @@
 package com.example.kyc;
 
-import com.example.kyc.Customer;
+import java.time.LocalDateTime;
 
-public class CustomerDto {
+public class CustomerDTO {
 
+    private Long id;
     private String userId;
     private String fullAadhaarNumber;
     private String lastFourDigitsOfAadhaar;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private String createdBy;
     private String updatedBy;
-    private Customer.KycDeduplicationStatus kycDedupStatus;
-    private Customer.KycType kycType;
+    private String kycDedupStatus; // Use String here
+    private String kycType; // Use String here
 
     // Getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -37,6 +49,22 @@ public class CustomerDto {
         this.lastFourDigitsOfAadhaar = lastFourDigitsOfAadhaar;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
@@ -53,19 +81,19 @@ public class CustomerDto {
         this.updatedBy = updatedBy;
     }
 
-    public Customer.KycDeduplicationStatus getKycDedupStatus() {
+    public String getKycDedupStatus() {
         return kycDedupStatus;
     }
 
-    public void setKycDedupStatus(Customer.KycDeduplicationStatus kycDedupStatus) {
+    public void setKycDedupStatus(String kycDedupStatus) {
         this.kycDedupStatus = kycDedupStatus;
     }
 
-    public Customer.KycType getKycType() {
+    public String getKycType() {
         return kycType;
     }
 
-    public void setKycType(Customer.KycType kycType) {
+    public void setKycType(String kycType) {
         this.kycType = kycType;
     }
 }

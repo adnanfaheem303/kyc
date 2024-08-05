@@ -1,9 +1,8 @@
 package com.example.kyc;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -12,15 +11,60 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fullAadhaarNumber;
-    private String last4Digits;
 
+    @Column(unique = true, nullable = false)
+    private String userId;
+
+    @Column(nullable = false)
+    private String fullAadhaarNumber;
+
+    @Column(nullable = false)
+    private String lastFourDigitsOfAadhaar;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
+
+    private String createdBy;
+
+    private String updatedBy;
+
+    @Enumerated(EnumType.STRING)
+    private KycDeduplicationStatus kycDedupStatus;
+
+    @Enumerated(EnumType.STRING)
+    private KycType kycType;
+
+    // Getters and setters
+
+    // Enum for KYC Deduplication Status
+    public enum KycDeduplicationStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
+    // Enum for KYC Type
+    public enum KycType {
+        PRIMARY,
+        SECONDARY
+    }
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFullAadhaarNumber() {
@@ -31,11 +75,59 @@ public class Customer {
         this.fullAadhaarNumber = fullAadhaarNumber;
     }
 
-    public String getLast4Digits() {
-        return last4Digits;
+    public String getLastFourDigitsOfAadhaar() {
+        return lastFourDigitsOfAadhaar;
     }
 
-    public void setLast4Digits(String last4Digits) {
-        this.last4Digits = last4Digits;
+    public void setLastFourDigitsOfAadhaar(String lastFourDigitsOfAadhaar) {
+        this.lastFourDigitsOfAadhaar = lastFourDigitsOfAadhaar;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public KycDeduplicationStatus getKycDedupStatus() {
+        return kycDedupStatus;
+    }
+
+    public void setKycDedupStatus(KycDeduplicationStatus kycDedupStatus) {
+        this.kycDedupStatus = kycDedupStatus;
+    }
+
+    public KycType getKycType() {
+        return kycType;
+    }
+
+    public void setKycType(KycType kycType) {
+        this.kycType = kycType;
     }
 }

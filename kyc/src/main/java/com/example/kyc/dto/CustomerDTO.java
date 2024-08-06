@@ -1,4 +1,4 @@
-package com.example.kyc;
+package com.example.kyc.dto;
 
 public class CustomerDTO {
     private String userId;

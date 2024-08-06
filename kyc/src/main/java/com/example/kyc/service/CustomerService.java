@@ -1,7 +1,7 @@
 package com.example.kyc.service;
 
 import com.example.kyc.Customer;
-import com.example.kyc.CustomerDTO;
+import com.example.kyc.dto.CustomerDTO;
 import com.example.kyc.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

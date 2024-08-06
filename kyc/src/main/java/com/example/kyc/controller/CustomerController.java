@@ -1,7 +1,7 @@
 package com.example.kyc.controller;
 
 import com.example.kyc.Customer;
-import com.example.kyc.CustomerDTO;
+import com.example.kyc.dto.CustomerDTO;
 import com.example.kyc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,7 @@ public class CustomerController {
     public Optional<Customer> getCustomerByUserId(@PathVariable String userId) {
         return customerService.getCustomerByUserId(userId);
     }
+
 
     // Update an existing customer
     @PutMapping("/{userId}")

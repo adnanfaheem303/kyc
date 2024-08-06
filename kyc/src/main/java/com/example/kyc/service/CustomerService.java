@@ -31,8 +31,8 @@ public class CustomerService {
     }
 
     // Get a customer by user ID
-    public Optional<Customer> getCustomerByUserId(String userId) {
-        return Optional.ofNullable(customerRepository.findByUserId(userId));
+    public Customer getCustomerByUserId(String userId) {
+        return (customerRepository.findByUserId(userId));
     }
 
     // Get a customer by full Aadhaar number

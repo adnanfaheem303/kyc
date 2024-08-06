@@ -2,6 +2,7 @@ package com.example.kyc;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 public class Customer {
@@ -32,6 +33,10 @@ public class Customer {
 
     @Enumerated(EnumType.STRING)
     private KycType kycType;
+
+    public Optional<Customer> map(Object o) {
+        return Optional.empty();
+    }
 
     // Getters and setters
 

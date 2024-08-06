@@ -4,6 +4,7 @@ import com.example.kyc.Customer;
 import com.example.kyc.dto.CustomerDTO;
 import com.example.kyc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,8 +26,9 @@ public class CustomerController {
 
     // Get a customer by user ID
     @GetMapping("/{userId}")
-    public Optional<Customer> getCustomerByUserId(@PathVariable String userId) {
-        return customerService.getCustomerByUserId(userId);
+    public ResponseEntity<Customer> getCustomerByUserId(@PathVariable String userId) {
+        Optional<Customer> customerDTO = Optional.ofNullable(customerService.getCustomerByUserId(userId));
+        return customerDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 

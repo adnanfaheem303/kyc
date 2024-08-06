@@ -1,42 +1,62 @@
 package com.example.kyc.service;
 
+import com.example.kyc.Customer;
+import com.example.kyc.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AadhaarService {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private CustomerRepository customerRepository;
 
-    private final AtomicLong userIdCounter = new AtomicLong(); // For generating unique IDs
+    // Save Aadhaar data for a customer
+    public Customer saveAadhaarData(String userId, String fullAadhaarNumber, String createdBy, String updatedBy, Customer.KycDeduplicationStatus kycDedupStatus, Customer.KycType kycType) {
+        Optional<Customer> optionalCustomer = Optional.ofNullable(customerRepository.findByUserId(userId));
+        Customer customer;
 
-    public Long createTableAndInsertData(String aadhaarNumber) {
-        // Automatically generate a unique user ID
-        Long userId = userIdCounter.incrementAndGet(); // Generate a new unique ID
+        if (optionalCustomer.isPresent()) {
+            customer = optionalCustomer.get();
+        } else {
+            customer = new Customer();
+            customer.setUserId(userId);
+            customer.setCreatedBy(createdBy);
+            customer.setCreatedDate(LocalDateTime.now());
+        }
 
-        // Extract last 4 digits of Aadhaar number
-        String last4Digits = aadhaarNumber.substring(aadhaarNumber.length() - 4);
+        customer.setFullAadhaarNumber(fullAadhaarNumber);
+        customer.setLastFourDigitsOfAadhaar(fullAadhaarNumber.substring(fullAadhaarNumber.length() - 4));
+        customer.setUpdatedBy(updatedBy);
+        customer.setUpdatedDate(LocalDateTime.now());
+        customer.setKycDedupStatus(kycDedupStatus);
+        customer.setKycType(kycType);
 
-        // Generate a unique table name based on userId
-        String tableName = "user_" + userId;
+        return customerRepository.save(customer);
+    }
 
-        // SQL statement to create a new table
-        String createTableSql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
-                + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                + "user_id BIGINT NOT NULL, "
-                + "last_4_digits VARCHAR(4) NOT NULL"
-                + ")";
-        jdbcTemplate.execute(createTableSql);
+    // Get Aadhaar data by user ID
+    public Optional<Customer> getAadhaarDataByUserId(String userId) {
+        return Optional.ofNullable(customerRepository.findByUserId(userId));
+    }
 
-        // SQL statement to insert data into the new table
-        String insertDataSql = "INSERT INTO " + tableName + " (user_id, last_4_digits) VALUES (?, ?)";
-        jdbcTemplate.update(insertDataSql, userId, last4Digits);
+    // Get Aadhaar data by full Aadhaar number
+    public Optional<Customer> getAadhaarDataByFullAadhaarNumber(String fullAadhaarNumber) {
+        return Optional.ofNullable(customerRepository.findByFullAadhaarNumber(fullAadhaarNumber));
+    }
 
-        // Return the generated userId
+    // Get Aadhaar data by last four digits of Aadhaar
+    public List<Customer> getAadhaarDataByLastFourDigitsOfAadhaar(String lastFourDigitsOfAadhaar) {
+        return customerRepository.findByLastFourDigitsOfAadhaar(lastFourDigitsOfAadhaar);
+    }
+
+    public String createCustomerWithAadhaar(String userId, String aadhaarNumber) {
         return userId;
     }
+
+    // Additional Aadhaar-related methods as needed
 }

@@ -1,9 +1,7 @@
 package com.example.kyc;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-
 
 @Entity
 public class Customer {
@@ -37,14 +35,19 @@ public class Customer {
 
     // Getters and setters
 
-    // Enum for KYC Deduplication Status
     public enum KycDeduplicationStatus {
+        PENDING,
+        APPROVED,
+        REJECTED;
 
+        public static KycDeduplicationStatus valueOf(KycDeduplicationStatus kycDedupStatus) {
+            return kycDedupStatus;
+        }
     }
 
-    // Enum for KYC Type
     public enum KycType {
-
+        PRIMARY,
+        SECONDARY
     }
 
     // Getters and setters
@@ -116,15 +119,15 @@ public class Customer {
         return kycDedupStatus;
     }
 
-    public void setKycDedupStatus(String kycDedupStatus) {
-        this.kycDedupStatus = KycDeduplicationStatus.valueOf(kycDedupStatus);
+    public void setKycDedupStatus(KycDeduplicationStatus kycDedupStatus) {
+        this.kycDedupStatus = kycDedupStatus;
     }
 
     public KycType getKycType() {
         return kycType;
     }
 
-    public void setKycType(String kycType) {
-        this.kycType = KycType.valueOf(kycType);
+    public void setKycType(KycType kycType) {
+        this.kycType = kycType;
     }
 }

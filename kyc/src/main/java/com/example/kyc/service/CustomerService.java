@@ -16,56 +16,76 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer createCustomer(CustomerDTO customerDto) {
-        Customer customer = new Customer();
-        customer.setUserId(customerDto.getUserId());
-        customer.setFullAadhaarNumber(customerDto.getFullAadhaarNumber());
-        customer.setLastFourDigitsOfAadhaar(customerDto.getLastFourDigitsOfAadhaar());
-        customer.setCreatedDate(LocalDateTime.now());
+    // Create or update a customer
+    public Customer saveCustomer(Customer customer) {
         customer.setUpdatedDate(LocalDateTime.now());
-        customer.setCreatedBy(customerDto.getCreatedBy());
-        customer.setUpdatedBy(customerDto.getUpdatedBy());
-        customer.setKycDedupStatus(String.valueOf(Customer.KycDeduplicationStatus.valueOf(customerDto.getKycDedupStatus())));
-        customer.setKycType(String.valueOf(Customer.KycType.valueOf(customerDto.getKycType())));
-
+        if (customer.getId() == null) {
+            customer.setCreatedDate(LocalDateTime.now());
+        }
         return customerRepository.save(customer);
     }
 
-    public List<Customer> getAllCustomers() {
-        return (List<Customer>) customerRepository.findAll();
-    }
-
+    // Get a customer by ID
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
 
-    public Customer updateCustomer(Long id, CustomerDTO customerDto) {
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-
-        if (optionalCustomer.isPresent()) {
-            Customer customer = optionalCustomer.get();
-            customer.setFullAadhaarNumber(customerDto.getFullAadhaarNumber());
-            customer.setLastFourDigitsOfAadhaar(customerDto.getLastFourDigitsOfAadhaar());
-            customer.setUpdatedDate(LocalDateTime.now());
-            customer.setUpdatedBy(customerDto.getUpdatedBy());
-            customer.setKycDedupStatus(customerDto.getKycDedupStatus());
-            customer.setKycType(customerDto.getKycType());
-
-            return customerRepository.save(customer);
-        } else {
-            throw new RuntimeException("Customer not found");
-        }
+    // Get a customer by user ID
+    public Optional<Customer> getCustomerByUserId(String userId) {
+        return Optional.ofNullable(customerRepository.findByUserId(userId));
     }
 
-    public void deleteCustomer(Long id) {
+    // Get a customer by full Aadhaar number
+    public Optional<Customer> getCustomerByFullAadhaarNumber(String fullAadhaarNumber) {
+        return Optional.ofNullable(customerRepository.findByFullAadhaarNumber(fullAadhaarNumber));
+    }
+
+    // Get customers by last four digits of Aadhaar
+    public List<Customer> getCustomersByLastFourDigitsOfAadhaar(String lastFourDigitsOfAadhaar) {
+        return customerRepository.findByLastFourDigitsOfAadhaar(lastFourDigitsOfAadhaar);
+    }
+
+    // Get customers by KYC Deduplication Status
+    public List<Customer> getCustomersByKycDedupStatus(Customer.KycDeduplicationStatus kycDedupStatus) {
+        return customerRepository.findByKycDedupStatus(kycDedupStatus);
+    }
+
+    // Get customers by KYC Type
+    public List<Customer> getCustomersByKycType(Customer.KycType kycType) {
+        return customerRepository.findByKycType(kycType);
+    }
+
+    // Get customers by created date range
+    public List<Customer> getCustomersByCreatedDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return customerRepository.findByCreatedDateBetween(startDate, endDate);
+    }
+
+    // Get customers by updated date range
+    public List<Customer> getCustomersByUpdatedDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return customerRepository.findByUpdatedDateBetween(startDate, endDate);
+    }
+
+    // Delete a customer by ID
+    public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);
     }
 
-    public Customer findByUserId(String userId) {
-        return customerRepository.findByUserId(userId);
+    // Delete a customer by user ID
+    public void deleteCustomerByUserId(String userId) {
+        customerRepository.deleteByUserId(userId);
     }
 
-    public Customer findByLastFourDigitsOfAadhaar(String lastFourDigitsOfAadhaar) {
-        return customerRepository.findByLastFourDigitsOfAadhaar(lastFourDigitsOfAadhaar);
+    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+        return customerDTO;
     }
+
+    public CustomerDTO updateCustomer(String userId, CustomerDTO customerDTO) {
+        return customerDTO;
+    }
+
+    public List<CustomerDTO> getAllCustomers() {
+        return List.of();
+    }
+
+    // Additional methods can be added as needed
 }

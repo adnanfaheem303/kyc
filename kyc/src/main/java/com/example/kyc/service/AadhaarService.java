@@ -2,13 +2,13 @@ package com.example.kyc.service;
 
 import com.example.kyc.dto.AadhaarDTO;
 import com.example.kyc.Customer;
-import com.example.kyc.repository.AadhaarRepository;
-import com.example.kyc.repository.CustomerRepository;
+import com.example.kyc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +19,15 @@ public class AadhaarService {
 
     @Autowired
     private AadhaarRepository aadhaarRepository;
+
+    @Autowired
+    private CKYCRepository ckycRepository;
+
+    @Autowired
+    private DigiLockerRepository digiLockerRepository;
+
+    @Autowired
+    private OKYCRepository okycRepository;
 
     // This method adds a record to the Customer table
     public void createCustomerRecord(AadhaarDTO aadhaarDTO) {
@@ -81,4 +90,45 @@ public class AadhaarService {
                 .collect(Collectors.toList());
     }
 
+    public void verifyKYC(String aadhaarNumber, String kycMethod) {
+        String lastFourDigits = aadhaarNumber.substring(aadhaarNumber.length() - 4);
+        Optional<Customer> customerOptional = customerRepository.findById(Long.valueOf(aadhaarNumber));
+
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+
+            boolean isVerified = false;
+
+            switch (kycMethod) {
+                case "CKYC":
+                    isVerified = ckycRepository.findById(customer.getUserId())
+                            .map(cky -> cky.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
+                            .orElse(false);
+                    break;
+                case "DigiLocker":
+                    isVerified = digiLockerRepository.findById(customer.getUserId())
+                            .map(digi -> digi.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
+                            .orElse(false);
+                    break;
+                case "OKYC":
+                    isVerified = okycRepository.findById(customer.getUserId())
+                            .map(okyc -> okyc.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
+                            .orElse(false);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid KYC method");
+            }
+
+            if (isVerified) {
+                customer.setKycType(Customer.KycType.valueOf(kycMethod));
+                customer.setKycDedupStatus(Customer.KycDeduplicationStatus.KYC_completed);
+                customerRepository.save(customer);
+            } else {
+                // Handle verification failure
+                throw new IllegalArgumentException("KYC verification failed");
+            }
+        } else {
+            throw new IllegalArgumentException("Customer not found");
+        }
+    }
 }

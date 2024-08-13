@@ -28,4 +28,14 @@ public class AadhaarController {
         List<AadhaarDTO> aadhaarList = aadhaarService.getAllAadhaarRecords();
         return ResponseEntity.ok(aadhaarList);
     }
+
+    @PostMapping("/verify-kyc")
+    public ResponseEntity<String> verifyKYC(@RequestParam String aadhaarNumber, @RequestParam String kycMethod) {
+        try {
+            aadhaarService.verifyKYC(aadhaarNumber, kycMethod);
+            return ResponseEntity.ok("KYC verification successful");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

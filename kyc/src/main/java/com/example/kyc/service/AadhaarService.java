@@ -23,8 +23,8 @@ public class AadhaarService {
         customer.setUpdatedDate(LocalDateTime.now());
         customer.setCreatedBy(aadhaarDTO.getUserId()); // Assuming createdBy is the user ID
         customer.setUpdatedBy(aadhaarDTO.getUserId()); // Assuming updatedBy is the user ID
-        customer.setKycDedupStatus(Customer.KycDeduplicationStatus.PENDING); // Default status
-        customer.setKycType(Customer.KycType.PRIMARY); // Default type
+        customer.setKycDedupStatus(Customer.KycDeduplicationStatus.KYC_completed); // Default status
+        customer.setKycType(Customer.KycType.CKYC); // Default type
 
         customerRepository.save(customer);
     }

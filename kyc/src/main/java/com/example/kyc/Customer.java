@@ -41,9 +41,11 @@ public class Customer {
     // Getters and setters
 
     public enum KycDeduplicationStatus {
-        PENDING,
-        APPROVED,
-        REJECTED;
+        KYC_completed,
+        KYC_not_yet_completed,
+        KYC_no_match,
+        Data_mismatch,
+        Data_NA;
 
         public static KycDeduplicationStatus valueOf(KycDeduplicationStatus kycDedupStatus) {
             return kycDedupStatus;
@@ -51,8 +53,9 @@ public class Customer {
     }
 
     public enum KycType {
-        PRIMARY,
-        SECONDARY
+        CKYC,
+        OKYC,
+        DigiLocker
     }
 
     // Getters and setters

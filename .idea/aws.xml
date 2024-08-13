@@ -2,10 +2,21 @@
 <project version="4">
   <component name="accountSettings">
     <option name="activeRegion" value="us-east-1" />
+    <option name="recentlyUsedProfiles">
+      <list>
+        <option value="profile:cashe-297493477036-cashe-intern-nonprod" />
+      </list>
+    </option>
     <option name="recentlyUsedRegions">
       <list>
         <option value="us-east-1" />
       </list>
     </option>
+  </component>
+  <component name="connectionManager">
+    <option name="activeConnectionId" value="sso-session:cashe" />
+  </component>
+  <component name="explorerToolWindow">
+    <option name="selectedTab" value="Explorer" />
   </component>
 </project>

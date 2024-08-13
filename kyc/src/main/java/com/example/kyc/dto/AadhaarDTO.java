@@ -4,6 +4,11 @@ public class AadhaarDTO {
     private String userId;
     private String aadhaarNumber;
 
+    public AadhaarDTO(String userId, String aadhaarNumber) {
+        this.userId = userId;
+        this.aadhaarNumber = aadhaarNumber;
+    }
+
     // Getters and setters
     public String getUserId() {
         return userId;

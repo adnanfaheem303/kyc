@@ -18,7 +18,7 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 @Builder
 @Table(name = "aadhaar_KYC")
-public class KYCDTO {
+public class KYC_DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

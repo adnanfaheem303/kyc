@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AadhaarRepository extends JpaRepository<Aadhaar, Long> {
-    // You can add custom query methods here if needed
+    // custom query methods to be added here
 }

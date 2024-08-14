@@ -8,6 +8,7 @@ public class CKYC {
     @Id
     private String userId;
     private String lastFourDigitsOfAadhaar;
+    private String aadhaar;
 
     // Getter for userId
     public String getUserId() {
@@ -27,5 +28,13 @@ public class CKYC {
     // Setter for lastFourDigitsOfAadhaar
     public void setLastFourDigitsOfAadhaar(String lastFourDigitsOfAadhaar) {
         this.lastFourDigitsOfAadhaar = lastFourDigitsOfAadhaar;
+    }
+
+    public String getAadhaar() {
+        return aadhaar;
+    }
+
+    public void setAadhaar(String aadhaar) {
+        this.aadhaar = aadhaar;
     }
 }

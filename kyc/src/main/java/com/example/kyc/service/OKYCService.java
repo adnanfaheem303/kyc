@@ -11,8 +11,13 @@ public class OKYCService {
     @Autowired
     private OKYCRepository okycRepository;
 
-    public OKYC saveOKYCRecord(OKYC okyc) {
-        return okycRepository.save(okyc);
+    public OKYC saveOKYCRecord(OKYC oKYC) {
+        // Extract the last 4 digits of the Aadhaar number
+        String lastFourDigits = oKYC.getAadhaar().substring(oKYC.getAadhaar().length() - 4);
+        oKYC.setLastFourDigitsOfAadhaar(lastFourDigits);
+
+        // Save the record with only the last 4 digits of the Aadhaar number
+        return okycRepository.save(oKYC);
     }
 
     public OKYC getOKYCRecord(String userId) {

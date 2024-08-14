@@ -2,6 +2,9 @@ package com.example.kyc.service;
 
 import com.example.kyc.dto.AadhaarDTO;
 import com.example.kyc.Customer;
+import com.example.kyc.dto.KYCVerificationDTO;
+import com.example.kyc.entity.CKYC;
+import com.example.kyc.entity.DigiLocker;
 import com.example.kyc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,45 +93,48 @@ public class AadhaarService {
                 .collect(Collectors.toList());
     }
 
-    public void verifyKYC(String aadhaarNumber, String kycMethod) {
-        String lastFourDigits = aadhaarNumber.substring(aadhaarNumber.length() - 4);
-        Optional<Customer> customerOptional = customerRepository.findById(Long.valueOf(aadhaarNumber));
+    public boolean verifyKYC(KYCVerificationDTO verificationDTO) {
+        // Extract the last four digits of the Aadhaar number
+        String lastFourDigits = verificationDTO.getAadhaarNumber().substring(verificationDTO.getAadhaarNumber().length() - 4);
 
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
+        Optional<?> customerRecord;
 
-            boolean isVerified = false;
+        // Fetch the stored record based on the KYC type
+        switch (verificationDTO.getKycType()) {
+            case "CKYC":
+                customerRecord = ckycRepository.findByLastFourDigitsOfAadhaar(lastFourDigits);
+                break;
+            case "DigiLocker":
+                customerRecord = digiLockerRepository.findByLastFourDigitsOfAadhaar(lastFourDigits);
+                break;
+            case "OKYC":
+                customerRecord = okycRepository.findByLastFourDigitsOfAadhaar(lastFourDigits);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid KYC method");
+        }
 
-            switch (kycMethod) {
-                case "CKYC":
-                    isVerified = ckycRepository.findById(customer.getUserId())
-                            .map(cky -> cky.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
-                            .orElse(false);
-                    break;
-                case "DigiLocker":
-                    isVerified = digiLockerRepository.findById(customer.getUserId())
-                            .map(digi -> digi.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
-                            .orElse(false);
-                    break;
-                case "OKYC":
-                    isVerified = okycRepository.findById(customer.getUserId())
-                            .map(okyc -> okyc.getLastFourDigitsOfAadhaar().equals(lastFourDigits))
-                            .orElse(false);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid KYC method");
-            }
+        // Debug logs
+        System.out.println("KYC Type: " + verificationDTO.getKycType());
+        System.out.println("Last Four Digits: " + lastFourDigits);
+        System.out.println("Customer Record Present: " + customerRecord.isPresent());
 
-            if (isVerified) {
-                customer.setKycType(Customer.KycType.valueOf(kycMethod));
+        // Check if a matching record is found
+        if (customerRecord.isPresent()) {
+            // Fetch the customer associated with the Aadhaar number
+            Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findByFullAadhaarNumber(verificationDTO.getAadhaarNumber()));
+            if (customerOptional.isPresent()) {
+                Customer customer = customerOptional.get();
+                customer.setKycType(Customer.KycType.valueOf(verificationDTO.getKycType()));
                 customer.setKycDedupStatus(Customer.KycDeduplicationStatus.KYC_completed);
                 customerRepository.save(customer);
+                return true;
             } else {
-                // Handle verification failure
-                throw new IllegalArgumentException("KYC verification failed");
+                throw new IllegalArgumentException("Customer not found for the provided Aadhaar number");
             }
         } else {
-            throw new IllegalArgumentException("Customer not found");
+            // No matching record found
+            return false;
         }
     }
 }

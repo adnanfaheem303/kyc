@@ -71,7 +71,7 @@ public class AadhaarService {
         aadhaar.setAadhaarNumber(aadhaarDTO.getAadhaarNumber());
         aadhaarRepository.save(aadhaar);
 
-        // Create and save Customer record (assuming the Customer table uses similar data)
+        // Create and save Customer record
         Customer customer = new Customer();
         customer.setUserId(aadhaarDTO.getUserId());
         customer.setFullAadhaarNumber(aadhaarDTO.getAadhaarNumber());

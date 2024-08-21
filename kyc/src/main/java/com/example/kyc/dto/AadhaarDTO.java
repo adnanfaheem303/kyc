@@ -1,6 +1,6 @@
 package com.example.kyc.dto;
 
-public class AadhaarDTO {
+public class  AadhaarDTO {
     private String userId;
     private String aadhaarNumber;
 

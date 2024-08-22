@@ -3,6 +3,7 @@ package com.example.kyc.dto;
 public class KYCVerificationDTO {
     private String aadhaarNumber;
     private String kycType; // CKYC, DigiLocker, OKYC
+    private String lastfourdigits;
 
     // Getters and Setters
     public String getAadhaarNumber() {

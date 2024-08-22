@@ -33,28 +33,28 @@ public class AadhaarService {
     private OKYCRepository okycRepository;
 
     // This method adds a record to the Customer table
-    public void createCustomerRecord(AadhaarDTO aadhaarDTO) {
-        Customer customer = new Customer();
-        customer.setUserId(aadhaarDTO.getUserId());
-        customer.setFullAadhaarNumber(aadhaarDTO.getAadhaarNumber());
-        customer.setLastFourDigitsOfAadhaar(aadhaarDTO.getAadhaarNumber().substring(aadhaarDTO.getAadhaarNumber().length() - 4));
-        customer.setCreatedDate(LocalDateTime.now());
-        customer.setUpdatedDate(LocalDateTime.now());
-        customer.setCreatedBy(aadhaarDTO.getUserId()); // Assuming createdBy is the user ID
-        customer.setUpdatedBy(aadhaarDTO.getUserId()); // Assuming updatedBy is the user ID
-        customer.setKycDedupStatus(Customer.KycDeduplicationStatus.KYC_completed); // Default status
-        customer.setKycType(Customer.KycType.CKYC); // Default type
-
-        customerRepository.save(customer);
-    }
+//    public void createCustomerRecord(AadhaarDTO aadhaarDTO) {
+//        Customer customer = new Customer();
+//        customer.setUserId(aadhaarDTO.getUserId());
+//        customer.setFullAadhaarNumber(aadhaarDTO.getAadhaarNumber());
+//        customer.setLastFourDigitsOfAadhaar(aadhaarDTO.getAadhaarNumber().substring(aadhaarDTO.getAadhaarNumber().length() - 4));
+//        customer.setCreatedDate(LocalDateTime.now());
+//        customer.setUpdatedDate(LocalDateTime.now());
+//        customer.setCreatedBy(aadhaarDTO.getUserId()); // Assuming createdBy is the user ID
+//        customer.setUpdatedBy(aadhaarDTO.getUserId()); // Assuming updatedBy is the user ID
+//        customer.setKycDedupStatus(Customer.KycDeduplicationStatus.KYC_completed); // Default status
+//        customer.setKycType(Customer.KycType.CKYC); // Default type
+//
+//        customerRepository.save(customer);
+//    }
 
     // This method adds a record to the Aadhaar table
-    public void createAadhaarRecord(AadhaarDTO aadhaarDTO) {
-        com.example.kyc.entity.Aadhaar aadhaar = new com.example.kyc.entity.Aadhaar();
-        aadhaar.setUserId(aadhaarDTO.getUserId());
-        aadhaar.setAadhaarNumber(aadhaarDTO.getAadhaarNumber());
-        aadhaarRepository.save(aadhaar);
-    }
+//    public void createAadhaarRecord(AadhaarDTO aadhaarDTO) {
+//        com.example.kyc.entity.Aadhaar aadhaar = new com.example.kyc.entity.Aadhaar();
+//        aadhaar.setUserId(aadhaarDTO.getUserId());
+//        aadhaar.setAadhaarNumber(aadhaarDTO.getAadhaarNumber());
+//        aadhaarRepository.save(aadhaar);
+//    }
 
     // This method retrieves all records from the Aadhaar table
     public List<AadhaarDTO> getAllAadhaarRecords() {
@@ -86,12 +86,12 @@ public class AadhaarService {
         customerRepository.save(customer);
     }
 
-    public List<AadhaarDTO> getAllRecords() {
-        return aadhaarRepository.findAll()
-                .stream()
-                .map(aadhaar -> new AadhaarDTO(aadhaar.getUserId(), aadhaar.getAadhaarNumber()))
-                .collect(Collectors.toList());
-    }
+//    public List<AadhaarDTO> getAllRecords() {
+//        return aadhaarRepository.findAll()
+//                .stream()
+//                .map(aadhaar -> new AadhaarDTO(aadhaar.getUserId(), aadhaar.getAadhaarNumber()))
+//                .collect(Collectors.toList());
+//    }
 
     public boolean verifyKYC(KYCVerificationDTO verificationDTO) {
         // Extract the last four digits of the Aadhaar number
@@ -115,6 +115,7 @@ public class AadhaarService {
         }
 
         // Debug logs
+        System.out.println("Received Aadhaar Number: " + verificationDTO.getAadhaarNumber());
         System.out.println("KYC Type: " + verificationDTO.getKycType());
         System.out.println("Last Four Digits: " + lastFourDigits);
         System.out.println("Customer Record Present: " + customerRecord.isPresent());
@@ -133,7 +134,7 @@ public class AadhaarService {
                 throw new IllegalArgumentException("Customer not found for the provided Aadhaar number");
             }
         } else {
-            // No matching record found
+            System.out.println("No matching record found for the last four digits");
             return false;
         }
     }
